@@ -358,14 +358,6 @@
 }
 
 - (void)loginWithLimitedTracking:(CDVInvokedUrlCommand *)command {
-    if ([command.arguments count] == 1) {
-        NSString *nonceErrorMessage = @"No nonce specified";
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                         messageAsString:nonceErrorMessage];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        return;
-    }
-
     NSArray *permissions = [command argumentAtIndex:0];
     NSArray *permissionsArray = @[];
     NSString *nonce = [command argumentAtIndex:1];
@@ -396,7 +388,14 @@
         self.loginManager = [FBSDKLoginManager new];
     }
     self.loginTracking = FBSDKLoginTrackingLimited;
-    FBSDKLoginConfiguration *configuration = [[FBSDKLoginConfiguration alloc] initWithPermissions:permissionsArray tracking:FBSDKLoginTrackingLimited nonce:nonce];
+
+    FBSDKLoginConfiguration *configuration;
+    if ((![nonce isEqual:[NSNull null]]) && ([nonce length] != 0)) {
+        configuration = [[FBSDKLoginConfiguration alloc] initWithPermissions:permissionsArray tracking:FBSDKLoginTrackingLimited nonce:nonce];
+    } else {
+        configuration = [[FBSDKLoginConfiguration alloc] initWithPermissions:permissionsArray tracking:FBSDKLoginTrackingLimited];
+    }
+
     [self.loginManager logInFromViewController:[self topMostController] configuration:configuration completion:loginHandler];
 }
 
