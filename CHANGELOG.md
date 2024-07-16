@@ -1,3 +1,10 @@
+<a name="4.1.2-hogangnono"></a>
+
+# [4.1.2-hogangnono] (2024-07-16)
+
+## Refactor
+* enable to call initWithPermissions without nonce (set by uuid in sdk)
+
 <a name="4.1.1"></a>
 
 # [4.1.1](https://github.com/MaximBelov/cordova-plugin-fbsdk/releases/tag/v4.1.1) (2024-06-28)
